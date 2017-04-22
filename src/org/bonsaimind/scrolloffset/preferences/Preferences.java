@@ -14,6 +14,7 @@ import org.eclipse.jface.preference.IPreferenceStore;
 
 public class Preferences {
 	private static final String PREFERENCE_NAME_ENABLED = Activator.PLUGIN_ID + ".enabled";
+	private static final String PREFERENCE_NAME_ENABLED_DURING_MOUSEDOWN = Activator.PLUGIN_ID + ".enabled_during_mousedown";
 	private static final String PREFERENCE_NAME_OFFSET = Activator.PLUGIN_ID + ".offset";
 	private IPreferenceStore preferenceStore = null;
 	
@@ -23,6 +24,7 @@ public class Preferences {
 		this.preferenceStore = preferenceStore;
 		
 		preferenceStore.setDefault(PREFERENCE_NAME_ENABLED, true);
+		preferenceStore.setDefault(PREFERENCE_NAME_ENABLED_DURING_MOUSEDOWN, false);
 		preferenceStore.setDefault(PREFERENCE_NAME_OFFSET, 10);
 	}
 	
@@ -38,13 +40,22 @@ public class Preferences {
 		return preferenceStore.getBoolean(PREFERENCE_NAME_ENABLED);
 	}
 	
+	public boolean isEnabledDuringMousedown() {
+		return preferenceStore.getBoolean(PREFERENCE_NAME_ENABLED_DURING_MOUSEDOWN);
+	}
+	
 	public void restoreDefaults() {
 		preferenceStore.setToDefault(PREFERENCE_NAME_ENABLED);
+		preferenceStore.setToDefault(PREFERENCE_NAME_ENABLED_DURING_MOUSEDOWN);
 		preferenceStore.setToDefault(PREFERENCE_NAME_OFFSET);
 	}
 	
 	public void setEnabled(boolean enabled) {
 		preferenceStore.setValue(PREFERENCE_NAME_ENABLED, enabled);
+	}
+	
+	public void setEnabledDuringMousedown(boolean enabled) {
+		preferenceStore.setValue(PREFERENCE_NAME_ENABLED_DURING_MOUSEDOWN, enabled);
 	}
 	
 	public void setOffset(int offset) {

@@ -20,6 +20,9 @@ public class Scroller {
 	/** If the scrolling offset is enabled. */
 	private static boolean enabled = true;
 	
+	/** If the scrolling offset is enabled during mousedown. */
+	private static boolean enabledDuringMousedown = false;
+	
 	/** The offset in lines. */
 	private static int offset = 10;
 	
@@ -45,7 +48,7 @@ public class Scroller {
 			return;
 		}
 		
-		if (mouseDown) {
+		if (!enabledDuringMousedown && mouseDown) {
 			return;
 		}
 		
@@ -69,6 +72,7 @@ public class Scroller {
 	 */
 	public static void updateFromPreferences() {
 		enabled = Activator.getDefault().getPreferences().isEnabled();
+		enabledDuringMousedown = Activator.getDefault().getPreferences().isEnabledDuringMousedown();
 		offset = Activator.getDefault().getPreferences().getOffset();
 	}
 }
