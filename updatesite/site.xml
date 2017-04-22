@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/org.bonsaimind.scrolloffset_1.0.0.qualifier.jar" id="org.bonsaimind.scrolloffset" version="1.0.0.qualifier"/>
+</site>
