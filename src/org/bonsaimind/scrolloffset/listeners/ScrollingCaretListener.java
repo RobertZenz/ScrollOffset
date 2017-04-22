@@ -40,55 +40,32 @@ public class ScrollingCaretListener implements CaretListener, MouseListener {
 	 */
 	@Override
 	public void caretMoved(CaretEvent event) {
-		// Display.getDefault().asyncExec(new Runnable() {
-		//
-		// @Override
-		// public void run() {
-		System.out.println("move");
 		Scroller.scroll(textViewer, mouseDown);
-		// }
-		// });
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void mouseDoubleClick(MouseEvent e) {
 		// Not needed.
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void mouseDown(MouseEvent e) {
 		mouseDown = true;
 	}
 	
-	//
-	// @Override
-	// public void mouseEnter(MouseEvent e) {
-	// // TODO Auto-generated method stub
-	//
-	// }
-	//
-	// @Override
-	// public void mouseExit(MouseEvent e) {
-	// // TODO Auto-generated method stub
-	//
-	// }
-	//
-	// @Override
-	// public void mouseHover(MouseEvent e) {
-	// // TODO Auto-generated method stub
-	// System.out.println(e.button);
-	// }
-	//
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void mouseUp(MouseEvent e) {
 		mouseDown = false;
 		
 		Scroller.scroll(textViewer, mouseDown);
 	}
-	
-	// @Override
-	// public void mouseMove(MouseEvent e) {
-	// // TODO Auto-generated method stub
-	// System.out.println(e.stateMask);
-	// }
 }

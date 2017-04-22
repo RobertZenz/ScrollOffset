@@ -13,10 +13,14 @@ import org.bonsaimind.scrolloffset.Activator;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.swt.custom.StyledText;
 
+/**
+ * {@link Scroller} is the main class which knows how to scroll.
+ */
 public class Scroller {
 	/** If the scrolling offset is enabled. */
 	private static boolean enabled = true;
 	
+	/** The offset in lines. */
 	private static int offset = 10;
 	
 	static {
@@ -30,6 +34,12 @@ public class Scroller {
 		// Nothing to do, no instancing.
 	}
 	
+	/**
+	 * Performs the scroll.
+	 * 
+	 * @param textViewer The {@link ITextViewer} to scroll.
+	 * @param mouseDown If the mouse is currently pressed.
+	 */
 	public static final void scroll(ITextViewer textViewer, boolean mouseDown) {
 		if (!enabled) {
 			return;
