@@ -1,0 +1,14 @@
+ScrollOffset
+============
+
+
+ScrollOffset is an Eclipse plugin which allowes you to define a certain area
+around the caret to keep when scrolling.
+
+It is similar as the scrolloffset setting in Vim.
+
+
+License
+-------
+
+ScrollOffset is licensed under the Eclipse Public License 1.0.
