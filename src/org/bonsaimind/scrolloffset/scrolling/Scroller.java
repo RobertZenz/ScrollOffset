@@ -10,6 +10,7 @@
 package org.bonsaimind.scrolloffset.scrolling;
 
 import org.bonsaimind.scrolloffset.Activator;
+import org.bonsaimind.scrolloffset.preferences.Preferences;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.swt.custom.StyledText;
 
@@ -71,8 +72,10 @@ public class Scroller {
 	 * Updates to the new preferences.
 	 */
 	public static void updateFromPreferences() {
-		enabled = Activator.getDefault().getPreferences().isEnabled();
-		enabledDuringMousedown = Activator.getDefault().getPreferences().isEnabledDuringMousedown();
-		offset = Activator.getDefault().getPreferences().getOffset();
+		Preferences preferences = Activator.getDefault().getPreferences();
+		
+		enabled = preferences.isEnabled();
+		enabledDuringMousedown = preferences.isEnabledDuringMousedown();
+		offset = preferences.getOffset();
 	}
 }
