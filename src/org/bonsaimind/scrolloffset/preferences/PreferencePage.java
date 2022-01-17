@@ -67,7 +67,7 @@ public class PreferencePage extends org.eclipse.jface.preference.PreferencePage 
 		lblOffset.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
 		lblOffset.setText("Offset");
 		
-		txtOffset = new Text(parent, SWT.RIGHT);
+		txtOffset = new Text(parent, SWT.BORDER | SWT.RIGHT);
 		txtOffset.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
 		btnEnableDuringMousedown = new Button(parent, SWT.CHECK);
