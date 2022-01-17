@@ -12,6 +12,7 @@ package org.bonsaimind.scrolloffset.scrolling;
 import org.bonsaimind.scrolloffset.Activator;
 import org.bonsaimind.scrolloffset.preferences.Preferences;
 import org.eclipse.jface.text.ITextViewer;
+import org.eclipse.jface.text.ITextViewerExtension5;
 import org.eclipse.swt.custom.StyledText;
 
 /**
@@ -42,9 +43,10 @@ public class Scroller {
 	 * Performs the scroll.
 	 * 
 	 * @param textViewer The {@link ITextViewer} to scroll.
+	 * @param foldingTextViewer The {@link ITextViewerExtension5} to scroll.
 	 * @param mouseDown If the mouse is currently pressed.
 	 */
-	public static final void scroll(ITextViewer textViewer, boolean mouseDown) {
+	public static final void scroll(ITextViewer textViewer, ITextViewerExtension5 foldingTextViewer, boolean mouseDown) {
 		if (!enabled) {
 			return;
 		}
@@ -55,16 +57,33 @@ public class Scroller {
 		
 		StyledText styledText = textViewer.getTextWidget();
 		
-		int visibleLineCount = textViewer.getBottomIndex() - textViewer.getTopIndex();
+		int topLineIndex = textViewer.getTopIndex();
+		int bottomLineIndex = textViewer.getBottomIndex();
+		
+		if (foldingTextViewer != null) {
+			topLineIndex = foldingTextViewer.modelLine2WidgetLine(topLineIndex);
+			bottomLineIndex = foldingTextViewer.modelLine2WidgetLine(bottomLineIndex);
+		}
+		
+		int visibleLineCount = bottomLineIndex - topLineIndex;
+		
 		int offsetToUse = Math.min(offset, visibleLineCount / 2);
 		int currentLine = styledText.getLineAtOffset(styledText.getCaretOffset());
 		
-		if (currentLine >= offsetToUse && currentLine <= styledText.getLineCount() - offsetToUse) {
-			if (currentLine <= (textViewer.getTopIndex() + offsetToUse)) {
-				textViewer.setTopIndex(currentLine - offsetToUse);
-			} else if (currentLine >= (textViewer.getBottomIndex() - offsetToUse)) {
-				textViewer.setTopIndex(currentLine + offsetToUse - visibleLineCount);
+		if (currentLine >= offsetToUse && currentLine <= textViewer.getDocument().getNumberOfLines() - offsetToUse) {
+			int newTopLineIndex = topLineIndex;
+			
+			if (currentLine <= (topLineIndex + offsetToUse)) {
+				newTopLineIndex = currentLine - offsetToUse;
+			} else if (currentLine >= (bottomLineIndex - offsetToUse)) {
+				newTopLineIndex = currentLine + offsetToUse - visibleLineCount;
 			}
+			
+			if (foldingTextViewer != null) {
+				newTopLineIndex = foldingTextViewer.widgetLine2ModelLine(newTopLineIndex);
+			}
+			
+			textViewer.setTopIndex(newTopLineIndex);
 		}
 	}
 	

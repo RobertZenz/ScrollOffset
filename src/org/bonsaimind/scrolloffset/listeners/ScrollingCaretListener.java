@@ -11,6 +11,7 @@ package org.bonsaimind.scrolloffset.listeners;
 
 import org.bonsaimind.scrolloffset.scrolling.Scroller;
 import org.eclipse.jface.text.ITextViewer;
+import org.eclipse.jface.text.ITextViewerExtension5;
 import org.eclipse.swt.custom.CaretEvent;
 import org.eclipse.swt.custom.CaretListener;
 import org.eclipse.swt.events.MouseEvent;
@@ -21,6 +22,7 @@ import org.eclipse.swt.events.MouseListener;
  * according to the caret position.
  */
 public class ScrollingCaretListener implements CaretListener, MouseListener {
+	private ITextViewerExtension5 foldingTextViewer = null;
 	private boolean mouseDown = false;
 	private ITextViewer textViewer = null;
 	
@@ -33,6 +35,10 @@ public class ScrollingCaretListener implements CaretListener, MouseListener {
 		super();
 		
 		this.textViewer = textViewer;
+		
+		if (textViewer instanceof ITextViewerExtension5) {
+			this.foldingTextViewer = (ITextViewerExtension5)textViewer;
+		}
 	}
 	
 	/**
@@ -40,7 +46,7 @@ public class ScrollingCaretListener implements CaretListener, MouseListener {
 	 */
 	@Override
 	public void caretMoved(CaretEvent event) {
-		Scroller.scroll(textViewer, mouseDown);
+		Scroller.scroll(textViewer, foldingTextViewer, mouseDown);
 	}
 	
 	/**
@@ -66,6 +72,6 @@ public class ScrollingCaretListener implements CaretListener, MouseListener {
 	public void mouseUp(MouseEvent e) {
 		mouseDown = false;
 		
-		Scroller.scroll(textViewer, mouseDown);
+		Scroller.scroll(textViewer, foldingTextViewer, mouseDown);
 	}
 }
