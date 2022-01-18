@@ -11,8 +11,12 @@ package org.bonsaimind.scrolloffset.listeners;
 
 import org.bonsaimind.scrolloffset.scrolling.Scroller;
 import org.eclipse.jface.text.ITextViewer;
+import org.eclipse.jface.text.ITextViewerExtension5;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CaretEvent;
 import org.eclipse.swt.custom.CaretListener;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 
@@ -20,7 +24,8 @@ import org.eclipse.swt.events.MouseListener;
  * The {@link ScrollingCaretListener} is the main class which does scroll
  * according to the caret position.
  */
-public class ScrollingCaretListener implements CaretListener, MouseListener {
+public class ScrollingCaretListener implements CaretListener, KeyListener, MouseListener {
+	private ITextViewerExtension5 foldingTextViewer = null;
 	private boolean mouseDown = false;
 	private ITextViewer textViewer = null;
 	
@@ -33,6 +38,10 @@ public class ScrollingCaretListener implements CaretListener, MouseListener {
 		super();
 		
 		this.textViewer = textViewer;
+		
+		if (textViewer instanceof ITextViewerExtension5) {
+			this.foldingTextViewer = (ITextViewerExtension5)textViewer;
+		}
 	}
 	
 	/**
@@ -40,7 +49,25 @@ public class ScrollingCaretListener implements CaretListener, MouseListener {
 	 */
 	@Override
 	public void caretMoved(CaretEvent event) {
-		Scroller.scroll(textViewer, mouseDown);
+		Scroller.scroll(textViewer, foldingTextViewer, mouseDown);
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void keyPressed(KeyEvent e) {
+		if (e.keyCode == SWT.PAGE_UP || e.keyCode == SWT.PAGE_DOWN) {
+			Scroller.moveCaret(textViewer, foldingTextViewer);
+		}
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// Not needed.
 	}
 	
 	/**
@@ -66,6 +93,6 @@ public class ScrollingCaretListener implements CaretListener, MouseListener {
 	public void mouseUp(MouseEvent e) {
 		mouseDown = false;
 		
-		Scroller.scroll(textViewer, mouseDown);
+		Scroller.scroll(textViewer, foldingTextViewer, mouseDown);
 	}
 }

@@ -12,6 +12,7 @@ package org.bonsaimind.scrolloffset.scrolling;
 import org.bonsaimind.scrolloffset.Activator;
 import org.bonsaimind.scrolloffset.preferences.Preferences;
 import org.eclipse.jface.text.ITextViewer;
+import org.eclipse.jface.text.ITextViewerExtension5;
 import org.eclipse.swt.custom.StyledText;
 
 /**
@@ -42,9 +43,10 @@ public class Scroller {
 	 * Performs the scroll.
 	 * 
 	 * @param textViewer The {@link ITextViewer} to scroll.
+	 * @param foldingTextViewer The {@link ITextViewerExtension5} to scroll.
 	 * @param mouseDown If the mouse is currently pressed.
 	 */
-	public static final void scroll(ITextViewer textViewer, boolean mouseDown) {
+	public static final void scroll(ITextViewer textViewer, ITextViewerExtension5 foldingTextViewer, boolean mouseDown) {
 		if (!enabled) {
 			return;
 		}
@@ -55,15 +57,89 @@ public class Scroller {
 		
 		StyledText styledText = textViewer.getTextWidget();
 		
-		int visibleLineCount = textViewer.getBottomIndex() - textViewer.getTopIndex();
+		int topLineIndex = textViewer.getTopIndex();
+		int bottomLineIndex = textViewer.getBottomIndex();
+		
+		if (foldingTextViewer != null) {
+			topLineIndex = foldingTextViewer.modelLine2WidgetLine(topLineIndex);
+			bottomLineIndex = foldingTextViewer.modelLine2WidgetLine(bottomLineIndex);
+		}
+		
+		int visibleLineCount = bottomLineIndex - topLineIndex;
+		
 		int offsetToUse = Math.min(offset, visibleLineCount / 2);
 		int currentLine = styledText.getLineAtOffset(styledText.getCaretOffset());
 		
-		if (currentLine >= offsetToUse && currentLine <= styledText.getLineCount() - offsetToUse) {
-			if (currentLine <= (textViewer.getTopIndex() + offsetToUse)) {
-				textViewer.setTopIndex(currentLine - offsetToUse);
-			} else if (currentLine >= (textViewer.getBottomIndex() - offsetToUse)) {
-				textViewer.setTopIndex(currentLine + offsetToUse - visibleLineCount);
+		int lastLineIndex = foldingTextViewer.modelLine2WidgetLine(textViewer.getDocument().getNumberOfLines() - 1);
+		
+		if (currentLine >= offsetToUse && currentLine <= lastLineIndex - offsetToUse) {
+			System.out.println("hit");
+			int newTopLineIndex = topLineIndex;
+			
+			if (currentLine <= (topLineIndex + offsetToUse)) {
+				newTopLineIndex = currentLine - offsetToUse;
+			} else if (currentLine >= (bottomLineIndex - offsetToUse)) {
+				newTopLineIndex = currentLine + offsetToUse - visibleLineCount;
+			}
+			
+			if (foldingTextViewer != null) {
+				newTopLineIndex = foldingTextViewer.widgetLine2ModelLine(newTopLineIndex);
+			}
+			
+			if (newTopLineIndex != currentLine) {
+				textViewer.setTopIndex(newTopLineIndex);
+			}
+		}
+	}
+	
+	/**
+	 * Moves the caret out of the "scroll zones".
+	 * 
+	 * @param textViewer The {@link ITextViewer} to move the caret.
+	 * @param foldingTextViewer The {@link ITextViewerExtension5} to move the
+	 *        caret.
+	 */
+	public static void moveCaret(
+			final ITextViewer textViewer,
+			final ITextViewerExtension5 foldingTextViewer) {
+		StyledText styledText = textViewer.getTextWidget();
+		
+		int topLineIndex = textViewer.getTopIndex();
+		int bottomLineIndex = textViewer.getBottomIndex();
+		
+		if (foldingTextViewer != null) {
+			topLineIndex = foldingTextViewer.modelLine2WidgetLine(topLineIndex);
+			bottomLineIndex = foldingTextViewer.modelLine2WidgetLine(bottomLineIndex);
+		}
+		
+		int visibleLineCount = bottomLineIndex - topLineIndex;
+		
+		int offsetToUse = Math.min(offset, visibleLineCount / 2);
+		int currentLine = styledText.getLineAtOffset(styledText.getCaretOffset());
+		int currentLineOffset = styledText.getCaretOffset() - styledText.getOffsetAtLine(currentLine);
+		
+		int lastLineIndex = foldingTextViewer.modelLine2WidgetLine(textViewer.getDocument().getNumberOfLines() - 1);
+		
+		if (currentLine >= offsetToUse && currentLine <= lastLineIndex - offsetToUse) {
+			int newCaretLineIndex = currentLine;
+			
+			if (currentLine <= topLineIndex + offsetToUse) {
+				newCaretLineIndex = topLineIndex + offsetToUse;
+			} else if (currentLine >= bottomLineIndex - offsetToUse) {
+				newCaretLineIndex = bottomLineIndex - offsetToUse;
+			}
+			
+			if (newCaretLineIndex != currentLine) {
+				int newCaretOffset = styledText.getOffsetAtLine(newCaretLineIndex);
+				int newCaretLineLength = styledText.getOffsetAtLine(newCaretLineIndex + 1) - newCaretOffset;
+				
+				if (newCaretLineLength > currentLineOffset) {
+					newCaretOffset = newCaretOffset + currentLineOffset;
+				} else {
+					newCaretOffset = newCaretOffset + newCaretLineLength;
+				}
+				
+				styledText.setCaretOffset(newCaretOffset);
 			}
 		}
 	}
