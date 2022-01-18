@@ -81,6 +81,9 @@ public final class Util {
 		
 		StyledText styledText = textViewer.getTextWidget();
 		
+		styledText.addCaretListener(scrollingCaretListener);
+		styledText.addKeyListener(scrollingCaretListener);
+		
 		// We want to know when the mouse button is down, however, obviously the
 		// widget has its listeners registered before us. That means that we
 		// would get the caret moved event first and the mouse event second,
@@ -97,8 +100,6 @@ public final class Util {
 		for (Listener listener : mouseUpListeners) {
 			styledText.removeListener(SWT.MouseUp, listener);
 		}
-		
-		styledText.addCaretListener(scrollingCaretListener);
 		styledText.addMouseListener(scrollingCaretListener);
 		
 		for (Listener listener : mouseDownListeners) {
