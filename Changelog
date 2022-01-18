@@ -1,0 +1,17 @@
+Changelog
+=========
+
+1.1.0
+-----
+
+ * Fixed that scrolling did not work in all editors.
+ * fixed that foldings would break scrolling.
+ * #1 Fixed that Page Up/Down would misbehave.
+ * #2 Fixed missing border around the preferences field.
+
+
+1.0
+---
+
+ * Initial release.
+
