@@ -2,7 +2,7 @@
 <feature
       id="org.bonsaimind.scrolloffset"
       label="ScrollOffset"
-      version="1.1.0.qualifier"
+      version="1.1.1.qualifier"
       provider-name="Robert &apos;Bobby&apos; Zenz">
 
    <description url="https://gitlab.com/RobertZenz/ScrollOffset">
@@ -107,7 +107,7 @@ This Agreement is governed by the laws of the State of New York and the intellec
          id="org.bonsaimind.scrolloffset"
          download-size="0"
          install-size="0"
-         version="1.1.0.qualifier"
+         version="1.1.1.qualifier"
          unpack="false"/>
 
 </feature>

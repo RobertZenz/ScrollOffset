@@ -2,4 +2,5 @@
 <site>
    <feature url="features/org.bonsaimind.scrolloffset_1.0.0.201704231832.jar" id="org.bonsaimind.scrolloffset" version="1.0.0.201704231832"/>
    <feature url="features/org.bonsaimind.scrolloffset_1.1.0.202201182318.jar" id="org.bonsaimind.scrolloffset" version="1.1.0.202201182318"/>
+   <feature url="features/org.bonsaimind.scrolloffset_1.1.1.202201192143.jar" id="org.bonsaimind.scrolloffset" version="1.1.1.202201192143"/>
 </site>

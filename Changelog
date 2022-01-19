@@ -1,6 +1,13 @@
 Changelog
 =========
 
+1.1.1
+-----
+
+ * Improved Page Up/Down behavior.
+ * Removed debug output.
+
+
 1.1.0
 -----
 
