@@ -73,7 +73,6 @@ public class Scroller {
 		int lastLineIndex = foldingTextViewer.modelLine2WidgetLine(textViewer.getDocument().getNumberOfLines() - 1);
 		
 		if (currentLine >= offsetToUse && currentLine <= lastLineIndex - offsetToUse) {
-			System.out.println("hit");
 			int newTopLineIndex = topLineIndex;
 			
 			if (currentLine <= (topLineIndex + offsetToUse)) {
