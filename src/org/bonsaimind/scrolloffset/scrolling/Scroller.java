@@ -13,6 +13,7 @@ import org.bonsaimind.scrolloffset.Activator;
 import org.bonsaimind.scrolloffset.preferences.Preferences;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.ITextViewerExtension5;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
 
 /**
@@ -97,10 +98,9 @@ public class Scroller {
 	 * @param textViewer The {@link ITextViewer} to move the caret.
 	 * @param foldingTextViewer The {@link ITextViewerExtension5} to move the
 	 *        caret.
+	 * @param pageUpDown Whether the Page Up or Down key was pressed.
 	 */
-	public static void moveCaret(
-			final ITextViewer textViewer,
-			final ITextViewerExtension5 foldingTextViewer) {
+	public static void moveCaret(ITextViewer textViewer, ITextViewerExtension5 foldingTextViewer, int pageUpDown) {
 		StyledText styledText = textViewer.getTextWidget();
 		
 		int topLineIndex = textViewer.getTopIndex();
@@ -123,9 +123,17 @@ public class Scroller {
 			int newCaretLineIndex = currentLine;
 			
 			if (currentLine <= topLineIndex + offsetToUse) {
-				newCaretLineIndex = topLineIndex + offsetToUse;
+				if (pageUpDown == SWT.PAGE_UP) {
+					newCaretLineIndex = topLineIndex + offsetToUse;
+				} else {
+					newCaretLineIndex = bottomLineIndex - offsetToUse;
+				}
 			} else if (currentLine >= bottomLineIndex - offsetToUse) {
-				newCaretLineIndex = bottomLineIndex - offsetToUse;
+				if (pageUpDown == SWT.PAGE_DOWN) {
+					newCaretLineIndex = bottomLineIndex - offsetToUse;
+				} else {
+					newCaretLineIndex = topLineIndex + offsetToUse;
+				}
 			}
 			
 			if (newCaretLineIndex != currentLine) {

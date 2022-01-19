@@ -58,7 +58,7 @@ public class ScrollingCaretListener implements CaretListener, KeyListener, Mouse
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if (e.keyCode == SWT.PAGE_UP || e.keyCode == SWT.PAGE_DOWN) {
-			Scroller.moveCaret(textViewer, foldingTextViewer);
+			Scroller.moveCaret(textViewer, foldingTextViewer, e.keyCode);
 		}
 	}
 	
